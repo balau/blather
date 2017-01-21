@@ -5,7 +5,8 @@
 
 import sys
 import signal
-import gobject
+import gi
+from gi.repository import GObject
 import os.path
 import subprocess
 from optparse import OptionParser
@@ -242,9 +243,9 @@ if __name__ == "__main__":
 	#make our blather object
 	blather = Blather(options)
 	#init gobject threads
-	gobject.threads_init()
+	GObject.threads_init()
 	#we want a main loop
-	main_loop = gobject.MainLoop()
+	main_loop = GObject.MainLoop()
 	#handle sigint
 	signal.signal(signal.SIGINT, signal.SIG_DFL)
 	#run the blather
