@@ -2,20 +2,21 @@
 # -- this code is licensed GPLv3
 # Copyright 2013 Jezra
 import sys
-import gobject
+import gi
+from gi.repository import GObject
 # Qt stuff
 from PySide.QtCore import Signal, Qt
 from PySide.QtGui import QApplication, QWidget, QMainWindow, QVBoxLayout
 from PySide.QtGui import QLabel, QPushButton, QCheckBox, QIcon, QAction
 
-class UI(gobject.GObject):
+class UI(GObject.GObject):
 	__gsignals__ = {
-		'command' : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,))
+		'command' : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_STRING,))
 	}
 
 	def __init__(self,args,continuous):
 		self.continuous = continuous
-		gobject.GObject.__init__(self)
+		GObject.GObject.__init__(self)
 		#start by making our app
 		self.app = QApplication(args)
 		#make a window
