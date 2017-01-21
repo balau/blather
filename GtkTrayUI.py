@@ -1,19 +1,18 @@
 import sys
-import gobject
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import GObject, Gtk
 
-import pygtk
-import gtk
-
-class UI(gobject.GObject):
+class UI(GObject.GObject):
 	__gsignals__ = {
-		'command' : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,))
+		'command' : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_STRING,))
 	}
 
 	def __init__(self,args, continuous):
-		gobject.GObject.__init__(self)
+		GObject.GObject.__init__(self)
 		self.continuous = continuous
 
-		self.statusicon = gtk.StatusIcon()
+		self.statusicon = Gtk.StatusIcon()
 		self.statusicon.set_title("Blather")
 		self.statusicon.set_name("Blather")
 		self.statusicon.set_tooltip_text("Blather - Idle")
@@ -21,10 +20,10 @@ class UI(gobject.GObject):
 		self.statusicon.connect("activate", self.continuous_toggle)
 		self.statusicon.connect("popup-menu", self.popup_menu)
 
-		self.menu = gtk.Menu()
-		self.menu_listen = gtk.MenuItem('Listen')
-		self.menu_continuous = gtk.CheckMenuItem('Continuous')
-		self.menu_quit = gtk.MenuItem('Quit')
+		self.menu = Gtk.Menu()
+		self.menu_listen = Gtk.MenuItem('Listen')
+		self.menu_continuous = Gtk.CheckMenuItem('Continuous')
+		self.menu_quit = Gtk.MenuItem('Quit')
 		self.menu.append(self.menu_listen)
 		self.menu.append(self.menu_continuous)
 		self.menu.append(self.menu_quit)
@@ -63,7 +62,7 @@ class UI(gobject.GObject):
 			self.statusicon.set_tooltip_text("Blather - Idle")
 
 	def popup_menu(self, item, button, time):
-		self.menu.popup(None, None, gtk.status_icon_position_menu, button, time, item)
+		self.menu.popup(None, None, Gtk.status_icon_position_menu, button, time, item)
 
 	def run(self):
 		#set the icon
