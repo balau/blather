@@ -2,33 +2,32 @@
 # -- this code is licensed GPLv3
 # Copyright 2013 Jezra
 import sys
-import gobject
-#Gtk
-import pygtk
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import GObject, Gtk, Gdk
 
-class UI(gobject.GObject):
+class UI(GObject.GObject):
 	__gsignals__ = {
-		'command' : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_STRING,))
+		'command' : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_STRING,))
 	}
 
 	def __init__(self,args, continuous):
-		gobject.GObject.__init__(self)
+		GObject.GObject.__init__(self)
 		self.continuous = continuous
 		#make a window
-		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+		self.window = Gtk.Window()
 		self.window.connect("delete_event", self.delete_event)
 		#give the window a name
 		self.window.set_title("BlatherGtk")
 		self.window.set_resizable(False)
 
-		layout = gtk.VBox()
+		layout = Gtk.VBox()
 		self.window.add(layout)
 		#make a listen/stop button
-		self.lsbutton = gtk.Button("Listen")
+		self.lsbutton = Gtk.Button("Listen")
 		layout.add(self.lsbutton)
 		#make a continuous button
-		self.ccheckbox = gtk.CheckButton("Continuous Listen")
+		self.ccheckbox = Gtk.CheckButton("Continuous Listen")
 		layout.add(self.ccheckbox)
 
 		#connect the buttons
@@ -36,13 +35,13 @@ class UI(gobject.GObject):
 		self.ccheckbox.connect("clicked",self.ccheckbox_clicked)
 
 		#add a label to the UI to display the last command
-		self.label = gtk.Label()
+		self.label = Gtk.Label()
 		layout.add(self.label)
 
 		#create an accellerator group for this window
-		accel = gtk.AccelGroup()
+		accel = Gtk.AccelGroup()
 		#add the ctrl+q to quit
-		accel.connect_group(gtk.keysyms.q, gtk.gdk.CONTROL_MASK, gtk.ACCEL_VISIBLE, self.accel_quit )
+		accel.connect(Gdk.KEY_Q, Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE, self.accel_quit )
 		#lock the group
 		accel.lock()
 		#add the group to the window
@@ -103,9 +102,9 @@ class UI(gobject.GObject):
 		self.icon_inactive = i
 
 	def set_icon_active(self):
-		gtk.window_set_default_icon_from_file(self.icon_active)
+		Gtk.Window.set_default_icon_from_file(self.icon_active)
 
 	def set_icon_inactive(self):
-		gtk.window_set_default_icon_from_file(self.icon_inactive)
+		Gtk.Window.set_default_icon_from_file(self.icon_inactive)
 
 
